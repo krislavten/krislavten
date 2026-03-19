@@ -1,45 +1,31 @@
-# Hi, I'm Kris (吴鹏飞)
+# Hi, I'm Kris
 
-**AI Infra Lead @ Yuanfudao (猿辅导)**
+**AI Infra Lead @ Yuanfudao (猿辅导)** · Beijing
 
-From observability engineer to AI engineer — building the full-stack infrastructure for Vibe Coding.
+From observability engineer to AI engineer — building infrastructure for Vibe Coding.
 
-```
-Octopus (Observability Platform, 4 yrs)
-  -> Rush (AI Code Generation) -> Pilot (Cloud Agent Orchestration) -> reskill (Skills Ecosystem)
-    -> TentaClaw (Full Lifecycle Loop)
-```
+## Current Focus
 
-## What I'm Building
+I'm working on the full stack that makes AI-native software development possible:
 
-**Rush** — AI-powered Web app generator. Natural language to full web apps with live preview, version control, and multi-tenant K8s deployment. 2400+ projects created.
+- **Rush** — AI code generation platform. Users describe what they want, get a full web app with live preview. 2400+ projects created in 4 months.
+- **Pilot** — Cloud AI Agent platform. AI agents (Claude Code / Codex) run in sandboxed containers, autonomously executing coding tasks end-to-end.
+- **[reskill](https://www.npmjs.com/package/reskill)** — Skills package manager for AI agents. Think `npm` for AI skills — declarative config, multi-agent support, version management. `npx reskill install` works across Cursor, Claude Code, Codex, Windsurf, and more.
+- **TentaClaw** — Closing the loop beyond coding: Issue -> Code -> Deploy -> Observe -> Feedback. One Repo Agent per repo, handling the full software lifecycle.
+- **[Sparring](https://github.com/krislavten/dual-ai-workflow)** — Dual AI peer review plugin for Claude Code. Two AI models review each other's work — better signal than single-model self-review.
 
-**Pilot** — Cloud AI Agent Platform. Run AI agents (Claude Code / Codex) in sandboxed containers to autonomously execute coding tasks — clone, understand, code, test, submit MR.
+## Background
 
-**reskill** — [Git-based Skills Package Manager](https://www.npmjs.com/package/reskill) for AI Agents. The first declarative skills management tool for the multi-agent era. `npx reskill install` across Cursor, Claude Code, Codex, Windsurf, and more.
+Before AI engineering, I spent 4 years building **Octopus** — Yuanfudao's company-wide observability platform (RUM, Logs, Trace, Alerts, LLM Observability). That experience is why TentaClaw's "Observe" loop isn't theoretical — it comes from real production pain.
 
-**TentaClaw** — Vibe Coding infrastructure that closes the loop: Issue -> Code -> Deploy -> Observe -> Feedback. One AI agent per repo, handling the full software lifecycle.
+## How I Work
 
-**Sparring** — [Dual AI peer review plugin](https://github.com/krislavten/dual-ai-workflow) for Claude Code. One AI writes code, another AI reviews from a different model's perspective.
+I don't just write code — I define products, design architectures, and ship. Recent pace: 4.75 PRs/day on Rush, TentaClaw Phase 1 done in a single day (4 parallel AI agents, 11 packages, 300+ tests).
 
-## Previously
+I also practice what I preach: Rush and Pilot are built using AI agents (Claude Code + Cursor) with Sparring peer review as the quality gate.
 
-**Octopus** — Built the frontend of Yuanfudao's company-wide observability platform (550K lines TypeScript). Led RUM monitoring, log system, alert system, LLM observability, and a custom design system based on Semi Design.
+## Tech
 
-## Delivery Pace
+TypeScript · React · Next.js · Node.js · Hono · PostgreSQL · Redis · Docker · K8s
 
-| | |
-|---|---|
-| Rush | 4.75 PRs/day avg, 14 PRs peak day |
-| TentaClaw Phase 1 | 11 packages + 300 tests in 1 day (4 parallel AI agents) |
-| reskill | First release in 2 days, 40 versions in 2 months |
-
-## Tech Stack
-
-TypeScript | React | Next.js | Node.js | Hono | PostgreSQL | Redis | Docker | K8s
-
-Claude Agent SDK | AI SDK | Gemini | Codex | MCP | OpenTelemetry
-
----
-
-*Product thinker + architect + hands-on builder. I define, design, and ship — end to end.*
+Claude Agent SDK · AI SDK · Gemini · Codex · MCP · OpenTelemetry
