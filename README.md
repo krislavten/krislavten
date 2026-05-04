@@ -39,3 +39,9 @@ I also practice what I preach: Rush, Pilot, and OpenRush are built using AI agen
 TypeScript · React · Next.js · Node.js · Hono · PostgreSQL · Redis · Docker · K8s
 
 Claude Agent SDK · AI SDK · Gemini · Codex · MCP · OpenTelemetry
+
+## Connect
+
+- Email — [adwerrd@hotmail.com](mailto:adwerrd@hotmail.com)
+- X — [@kris_wpf](https://x.com/kris_wpf)
+- 小红书 — @kriiswu
