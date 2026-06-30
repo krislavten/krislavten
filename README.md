@@ -7,7 +7,9 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > From observability engineer to AI engineer — building the infrastructure that makes AI-native software development possible.
 
-I don't train models — I build the ground that lets AI agents run, run correctly, and stay observable. And I'm the heaviest user of my own tools.
+I don't train models — I build agents. And not just the plumbing: I want to understand agents all the way down — what an agent really is, how you use it, what infrastructure it needs underneath. A heavy user of agents myself — 30B+ tokens a month.
+
+Three things I'm exploring: **agent coding** — getting full-pipeline capabilities into production; **agent applications** — Rush for building websites, TentaClaw for observability; and **agent infrastructure** — turning what we've learned running agents in Rush into a managed-agents platform that speeds up the business and ships AI faster.
 
 ## 🚀 What I'm Building
 

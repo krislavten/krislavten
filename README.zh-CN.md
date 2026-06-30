@@ -7,7 +7,9 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > 从可观测工程师，到 AI 工程师。我只做一件事：把 AI 原生开发真正缺的那层基础设施补上。
 
-我不做模型，只啃 AI Agent 落地时的工程问题：怎么让它跑起来、跑得对、出了岔子还能查。这些工具我自己每天都在用。
+我不训模型，做的是 Agent，而且不只是搭管道，是想把 Agent 整个做透：它到底该怎么定义、怎么用、底层要配什么基础设施。重度使用 Agent，月消耗 token 超过 300 亿。
+
+具体在探三块：一块是用 Agent 写代码，把全链路能力真正做进生产；一块是 Agent 能落到哪些业务上，我们拿 Rush 做建站、拿 TentaClaw 做可观测；还有一块是 Agent 的基础设施，把在 Rush 这些场景里趟出来的经验做成一个 managed agents 平台，反过来给业务提速、让 AI 更快落地。
 
 ## 🚀 在做什么
 
