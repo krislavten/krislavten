@@ -1,46 +1,60 @@
-# Hi, I'm Kris
+# Hi, I'm Kris 👋
 
-**AI Infra Lead @ Yuanfudao (猿辅导)** · Beijing
+**AI Infra Lead @ Yuanfudao (猿辅导 / Kanyun)** · Beijing
+GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.com/kris_wpf)
 
-From observability engineer to AI engineer — building infrastructure for the AI-native workplace.
+🌏 **[中文版本 →](./README.zh-CN.md)**
 
-## Current Focus
+> From observability engineer to AI engineer — building the infrastructure that makes AI-native software development possible.
 
-I'm working on the full stack that makes AI-native software development possible.
+I don't train models — I build the ground that lets AI agents run, run correctly, and stay observable. And I'm the heaviest user of my own tools.
 
-**Platforms**
+## 🚀 What I'm Building
 
-- **Rush** — AI code generation platform. Users describe what they want, get a full web app with live preview. 2400+ projects created in 4 months. Latest: 0.8.0 native plugin format — one install, works across Claude Code / Cursor / Codex.
-- **[OpenRush](https://github.com/kanyun-rush/open-rush)** — Open-source managed-agents platform for Claude Code, self-hosted on your own infrastructure. Sandboxed execution, Agent / Skill / MCP registry, dual-layer credential Vault, streaming event contract.
-- **Pilot** — Cloud AI Agent platform. AI agents (Claude Code / Codex) run in sandboxed containers, autonomously executing coding tasks end-to-end. SDK (`@kanyun-ai-infra/pilot`) and CLI (`@kanyun-ai-infra/pilot-cli`) shipping with v0.1.0.
+### Platforms
 
-**Tools**
+- **agenthub** (Pilot v2) — Self-built **managed-agents platform**: sandboxed Claude Code / Codex agents running coding (Git → PR/MR) and general (artifacts) tasks end-to-end. Four-layer resource model (Project / Workload / Revision / Session), credential Vault, resumable SSE, platform-level versioned Profile Registry — now serving **100% of production traffic**. SDK: `@kanyun-ai-infra/agenthub`.
+- **Rush** — Enterprise AI app/agent platform: describe what you want, get a full web app with live preview. **17,000+ projects, 3,000+ users, 500K+ messages** internally; ~1,000 monthly active creators, 400+ agents. Core maintainer (512 PRs).
+- **[OpenRush](https://github.com/kanyun-rush/open-rush)** — Open-source, self-hosted managed-agents platform for Claude Code: sandboxed execution, Agent/Skill/MCP registry, dual-layer credential Vault, streaming event contract.
 
-- **[reskill](https://www.npmjs.com/package/reskill)** — Skills package manager for AI agents. Think `npm` for AI skills — declarative config, multi-agent support, version management. `npx reskill install` works across Cursor, Claude Code, Codex, Windsurf, and more.
-- **[Sparring](https://github.com/krislavten/sparring)** — Multi-backend peer review plugin for Claude Code. Cursor Agent / Codex / GLM reviewers with primary/fallback and background jobs — better signal than single-model self-review.
-- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)** — Claude Desktop enterprise deployment toolkit. MDM config + plugin marketplace management for Mac/Windows IT admins.
+### Agent Toolchain — CLI + MCP
 
-**Loop**
+Tools so AI agents can operate real systems — all published to npm:
 
-- **TentaClaw** — Closing the loop beyond coding: Issue → Code → Deploy → Observe → Feedback. One Repo Agent per repo, handling the full software lifecycle.
+- **octo-cli** — Observability (logs / alerts / traces / metrics / RUM / topology)
+- **conso-cli** — Console-platform ops (deploy / services / pods / resources)
+- **docz-cli** / **rush-shimo-cli** — Company-docs access (DocSync / Shimo)
+- **jira-cli** — Jira for agents (issue / sprint / board)
+- **qlint** — Observability query linter — helps agents generate correct queries
 
-## Background
+### Skills, Quality & Infra
 
-Before AI engineering, I spent 4 years building **Octopus** — Yuanfudao's company-wide observability platform (RUM, Logs, Trace, Alerts, LLM Observability). That experience is why TentaClaw's "Observe" loop isn't theoretical — it comes from real production pain.
+- **reskill** *(co-built)* — Git-based skills package manager for AI agents — `npx reskill install`
+- **agent-aware** — Lets agents perceive user behavior (clicks / scroll / frustration) in web apps
+- **[Sparring](https://github.com/krislavten/sparring)** — Adversarial AI code-review plugin: a second AI (Cursor / Codex / GLM / Claude) hunts bugs in Claude's output
+- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)** — Claude Desktop enterprise deployment toolkit (reverse-engineered 51 MDM keys)
+- **rush-plugin · claude-env · env-sync** — Workflow & dev-env tooling
 
-## How I Work
+### Loop
 
-I don't just write code — I define products, design architectures, and ship. Recent pace: 4.75 PRs/day on Rush; TentaClaw Phase 1 (11 packages, 300+ tests) built in a single day with 4 parallel AI agents.
+- **TentaClaw** — Closing the loop beyond coding: Issue → Code → Deploy → Observe → Feedback, one agent per repo.
 
-I also practice what I preach: Rush, Pilot, and OpenRush are built using AI agents (Claude Code + Cursor) with Sparring peer review as the quality gate.
+## 🧭 How I Work
 
-## Tech
+- **I build the tools and live in them.** Rush, agenthub and OpenRush are themselves built by AI agents (Claude Code + Cursor), with Sparring as the quality gate — a tight build/use feedback loop.
+- **Verifier-first; environment design over central orchestration.** Define "how to verify it's correct" first, then let multiple agents self-coordinate through a shared environment instead of a central orchestrator.
+- **Pace:** ~971 PRs / ~2,100 commits in H1 2026 (512 on Rush alone).
 
-TypeScript · React · Next.js · Node.js · Hono · PostgreSQL · Redis · Docker · K8s
+## 🛠 Background
 
-Claude Agent SDK · AI SDK · Gemini · Codex · MCP · OpenTelemetry
+Before AI, 4 years building **Octopus** — Yuanfudao's company-wide observability platform (RUM / Logs / Trace / Alerts / LLM Observability). That's why the "Observe" loop is grounded in real production pain, not theory.
 
-## Connect
+## 💻 Tech
+
+`TypeScript` · `Node.js` · `React` · `Next.js` · `Hono` · `PostgreSQL` · `Redis` · `Docker` · `K8s`
+`Claude Agent SDK` · `AI SDK` · `MCP` · `Codex` · `OpenTelemetry` · `pnpm/turborepo`
+
+## 📫 Connect
 
 - Email — [adwerrd@hotmail.com](mailto:adwerrd@hotmail.com)
 - X — [@kris_wpf](https://x.com/kris_wpf)
