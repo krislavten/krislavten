@@ -28,7 +28,7 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 - 运行模块已交付，承接平台全部线上流量，Rush 已接入。
 - 除了编程类任务，平台还支持语音 Agent（语音输入输出和实时语音对话），可以接入企业微信、Slack 等渠道。
-- [AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase) 公开了电商和在线教育两个完整案例，包含 Agent 定义、业务工具和界面源码。
+- [AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase) 收录了电商、在线教育、语言学习和生产值班四个场景的 10 个 Agent 应用，从导购、上课、作业批改到英语实时语音对话和线上值班巡检，Agent 定义、业务工具和界面源码全部公开。
 
 <details>
 <summary>运行架构</summary>

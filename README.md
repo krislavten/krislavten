@@ -28,7 +28,7 @@ I'm also a heavy agent user — 200B+ tokens a month. Agents now write almost al
 
 - The Run module is shipped and serves **100% of the platform's production traffic**; Rush runs on it.
 - Beyond coding tasks: voice agents (speech in/out and real-time voice conversation) and channels like WeCom and Slack.
-- [AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase) — two end-to-end apps (e-commerce, online education) with agent definitions, business tools and UI source.
+- [AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase) — 10 agent apps across four scenarios (e-commerce, online education, language learning, production on-call): shopping, live lessons, homework help, real-time English voice role-play, on-call checks. Agent definitions, business tools and UI source all open.
 
 <details>
 <summary>Runtime architecture</summary>
