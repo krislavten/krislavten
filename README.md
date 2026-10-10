@@ -1,62 +1,103 @@
-# Hi, I'm Kris 👋
+# Hi, I'm Kris
 
 **AI Infra Lead @ Yuanfudao (猿辅导 / Kanyun)** · Beijing
 GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.com/kris_wpf)
 
-🌏 **[中文版本 →](./README.zh-CN.md)**
+**[中文版本 →](./README.zh-CN.md)**
 
-> From observability engineer to AI engineer — building the infrastructure that makes AI-native software development possible.
+> I build agent apps and the platform under them — and a team of agents writes the code.
 
-I don't train models — I build agents. And not just the plumbing: I want to understand agents all the way down — what an agent really is, how you use it, what infrastructure it needs underneath. A heavy user of agents myself — 30B+ tokens a month.
+I run AI infrastructure at Yuanfudao and explore where agents can be used in the business. On the application side: **Rush**, our enterprise AI app platform. On the platform side: **AgentHub**, our enterprise agent platform. What we learn in Rush becomes platform capabilities, and the platform gets the next agent app shipped faster.
 
-Three things I'm exploring: **agent coding** — getting full-pipeline capabilities into production; **agent applications** — Rush for building websites, TentaClaw for observability; and **agent infrastructure** — turning what we've learned running agents in Rush into a managed-agents platform that speeds up the business and ships AI faster.
+I'm also a heavy agent user — 200B+ tokens a month. Agents now write almost all of my code; my focus has shifted to designing systems, setting rules and judging results.
 
-## 🚀 What I'm Building
+## Selected Work
 
-### Platforms
+### AgentHub — enterprise agent platform (2026–present, lead)
 
-- **agenthub** (Pilot v2) — Self-built **managed-agents platform**: sandboxed Claude Code / Codex agents running coding (Git → PR/MR) and general (artifacts) tasks end-to-end. Four-layer resource model (Project / Workload / Revision / Session), credential Vault, resumable SSE, platform-level versioned Profile Registry — now serving **100% of production traffic**. SDK: `@kanyun-ai-infra/agenthub`.
-- **Rush** — Enterprise AI app/agent platform: describe what you want, get a full web app with live preview. **17,000+ projects, 3,000+ users, 500K+ messages** internally; ~1,000 monthly active creators, 400+ agents. Core maintainer (512 PRs).
-- **[OpenRush](https://github.com/kanyun-rush/open-rush)** — Open-source, self-hosted managed-agents platform for Claude Code: sandboxed execution, Agent/Skill/MCP registry, dual-layer credential Vault, streaming event contract.
+**The problem:** Getting one agent running is no longer hard; managing a fleet of them is. Changes have no versions or review, quality has no objective measure, and when production breaks nobody can say which change caused it.
 
-### Agent Toolchain — CLI + MCP
+**Key decisions:**
 
-Tools so AI agents can operate real systems — all published to npm:
+- **Agents as code.** Agent definitions live as files in a Git repo; every change goes through commit, review and a pipeline, so it can be traced and rolled back.
+- **Evaluation before release.** Every version is evaluated before it deploys to production. The goal is for "no unevaluated version ships" to be enforced by the system, not by process.
+- **Platform and business, separated.** Business teams own only the role, skills and business tools; the platform provides runtime, model access, credentials, releases and session management. Models are vendor-neutral.
+- **Observability as its own module.** Sessions, events and traces aren't only for debugging — they're also where new eval cases come from.
 
-- **octo-cli** — Observability (logs / alerts / traces / metrics / RUM / topology)
-- **conso-cli** — Console-platform ops (deploy / services / pods / resources)
-- **docz-cli** / **rush-shimo-cli** — Company-docs access (DocSync / Shimo)
-- **jira-cli** — Jira for agents (issue / sprint / board)
-- **qlint** — Observability query linter — helps agents generate correct queries
+**Results:**
 
-### Skills, Quality & Infra
+- The platform serves **100% of production traffic**; Rush runs on it.
+- Beyond coding tasks, the platform supports voice agents (speech in/out and real-time voice conversation) and chat channels such as WeCom and Slack.
+- [AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase) has 10 agent apps across four scenarios — e-commerce, online education, language learning and production on-call — covering shopping, live lessons, homework help, real-time English voice conversation and on-call checks. Agent definitions, business tools and UI source are all open.
 
-- **reskill** *(co-built)* — Git-based skills package manager for AI agents — `npx reskill install`
-- **agent-aware** — Lets agents perceive user behavior (clicks / scroll / frustration) in web apps
-- **[Sparring](https://github.com/krislavten/sparring)** — Adversarial AI code-review plugin: a second AI (Cursor / Codex / GLM / Claude) hunts bugs in Claude's output
-- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)** — Claude Desktop enterprise deployment toolkit (reverse-engineered 51 MDM keys)
-- **rush-plugin · claude-env · env-sync** — Workflow & dev-env tooling
+<details>
+<summary>Runtime architecture</summary>
 
-### Loop
+```mermaid
+flowchart LR
+    subgraph IN["Entry"]
+        UI["Console / hosted chat"]
+        SDK["SDK / API"]
+        GIT["Repo push → Pipeline"]
+        CH["Schedules / chat channels"]
+    end
+    CP["Control plane<br/>auth · validate · create Session · enqueue"]
+    DB[("PostgreSQL<br/>state · events · startup jobs")]
+    CW["Control worker<br/>acquire / bind Sandbox · warm pool"]
+    subgraph SB["Kanyun Sandbox"]
+        RT["Runtime<br/>Claude Code / Codex / live"]
+        PA["pod-agent<br/>Git · model · object-storage proxy"]
+    end
+    GW["Credential gateway<br/>MCP proxy · allowlist · secret injection"]
+    UP["Model services · MCP · repos"]
+    IN --> CP --> DB --> CW --> SB
+    RT --> GW --> UP
+    PA --> UP
+    RT -. events .-> DB
+    DB -. SSE / status .-> IN
+```
 
-- **TentaClaw** — Closing the loop beyond coding: Issue → Code → Deploy → Observe → Feedback, one agent per repo.
+Requests are written to the state store and return immediately. Sandbox acquisition, startup and health checks run in background orchestration; runtime events are written back to the platform and pushed to pages and API callers over SSE. Agent definitions contain only credential references; the gateway injects credentials at runtime.
 
-## 🧭 How I Work
+</details>
 
-- **I build the tools and live in them.** Rush, agenthub and OpenRush are themselves built by AI agents (Claude Code + Cursor), with Sparring as the quality gate — a tight build/use feedback loop.
-- **Verifier-first; environment design over central orchestration.** Define "how to verify it's correct" first, then let multiple agents self-coordinate through a shared environment instead of a central orchestrator.
-- **Pace:** ~971 PRs / ~2,100 commits in H1 2026 (512 on Rush alone).
+### Rush — enterprise AI app platform (core maintainer)
 
-## 🛠 Background
+Users describe what they want in natural language, and Rush generates a full web app with live preview. As of June 2026: **17,000+ projects and 3,000+ users** internally, with ~1,000 people creating projects each month. In H1 2026 I submitted 512 PRs to the Rush repo.
 
-Before AI, 4 years building **Octopus** — Yuanfudao's company-wide observability platform (RUM / Logs / Trace / Alerts / LLM Observability). That's why the "Observe" loop is grounded in real production pain, not theory.
+### Building with an agent team (H2 2026–present)
 
-## 💻 Tech
+Almost all of AgentHub's code is written by a team of agents — Claude Code, Codex and opencode sessions. I set the rules, make the final calls and grant access.
 
-`TypeScript` · `Node.js` · `React` · `Next.js` · `Hono` · `PostgreSQL` · `Redis` · `Docker` · `K8s`
-`Claude Agent SDK` · `AI SDK` · `MCP` · `Codex` · `OpenTelemetry` · `pnpm/turborepo`
+- **Output** — July to early October 2026, the team merged **~1,600 PRs** into AgentHub, 1,000+ of them in September.
+- **Quality** — before merge, every PR must pass four independent checks on the same commit: adversarial code review, deep review, mutation testing and CI. A task is done only when it's deployed to production and regression checks pass.
+- **Stable operation** — each role's boundaries live in a file that's reloaded automatically when a session restarts. Mistakes the team has made are recorded as rules in role files or hooks. For this I wrote the team's messaging layer, kris-team, and built a task board on a fork of herdr-board.
 
-## 📫 Connect
+### Octopus — company-wide observability platform (4 years)
+
+RUM, logs, traces, alerts and LLM observability.
+
+## Open Source
+
+- **[codeontic](https://github.com/krislavten/codeontic)** — At a deploy review, ops asked: "do you still have control over code that agents mostly wrote?" codeontic is my answer: a machine-checkable behavioral model above the code, with a deterministic checker verifying on every PR that the code still conforms to it.
+- **[Sparring](https://github.com/krislavten/sparring)** — a second AI that reviews Claude's code specifically to find defects; one of the agent team's merge checks.
+- **[OpenRush](https://github.com/kanyun-rush/open-rush)** — open-source, self-hosted managed-agents platform for Claude Code.
+- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)** — enterprise deployment toolkit for Claude Desktop.
+- **Other agent tools** — [ai-sdk-provider-dsh](https://github.com/krislavten/ai-sdk-provider-dsh), [ai-explore-review-loop-plugin](https://github.com/kanyun-inc/ai-explore-review-loop-plugin), and a set of CLIs that let agents operate our production systems (observability, ops, docs and Jira; published to npm).
+
+## Working Principles
+
+- **Agents writing code is settled.** So "in control of the code" no longer means "someone has read every line"; it means "how the system should behave is written somewhere a machine can check."
+- **Define "correct" before handing work to an agent.** Acceptance criteria, merge rules and role boundaries are written as files and enforced by scripts, not by memory.
+- **Rules come from real mistakes.** Every rule should be able to name the mistake that led to it.
+- **Build the tools, and use them.** AgentHub, Rush and the team tooling are written by agents, and I use them every day.
+
+## Tech
+
+`TypeScript` · `Node.js` · `React` · `Next.js` · `Hono` · `PostgreSQL` · `Redis` · `Docker` · `Kubernetes`
+`Claude Agent SDK` · `AI SDK` · `MCP` · `Claude Code` · `Codex` · `OpenTelemetry`
+
+## Contact
 
 - Email — [adwerrd@hotmail.com](mailto:adwerrd@hotmail.com)
 - X — [@kris_wpf](https://x.com/kris_wpf)

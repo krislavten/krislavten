@@ -1,63 +1,104 @@
-# 你好，我是 Kris（吴鹏飞）👋
+# 你好，我是 Kris（吴鹏飞）
 
 **AI Infra Lead @ 猿辅导（看云 / Kanyun）** · 北京
 GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.com/kris_wpf)
 
-🌏 **[English →](./README.md)**
+**[English →](./README.md)**
 
-> 从可观测工程师，到 AI 工程师。我只做一件事：把 AI 原生开发真正缺的那层基础设施补上。
+> 我做 Agent 应用，也做支撑它们的平台；写代码的是一支 Agent 团队。
 
-我不训模型，做的是 Agent，而且不只是搭管道，是想把 Agent 整个做透：它到底该怎么定义、怎么用、底层要配什么基础设施。重度使用 Agent，月消耗 token 超过 300 亿。
+我在猿辅导负责 AI 基础设施，同时探索 Agent 能用在哪些业务上。应用侧是企业级 AI 应用平台 **Rush**，平台侧是企业 Agent 平台 **AgentHub**。Rush 中积累的经验做成平台能力，平台再让新的 Agent 应用更快上线。
 
-具体在探三块：一块是用 Agent 写代码，把全链路能力真正做进生产；一块是 Agent 能落到哪些业务上，我们拿 Rush 做建站、拿 TentaClaw 做可观测；还有一块是 Agent 的基础设施，把在 Rush 这些场景里趟出来的经验做成一个 managed agents 平台，反过来给业务提速、让 AI 更快落地。
+我也是 Agent 的重度用户，每月消耗超过 2,000 亿 token。现在我的代码几乎都由 Agent 编写，我的工作重心转向设计系统、制定规则和判断结果。
 
-## 🚀 在做什么
+## 代表工作
 
-### 平台
+### AgentHub：企业 Agent 平台（2026 年至今，负责人）
 
-- **agenthub**（Pilot v2）：自研的托管 Agent 平台。Claude Code / Codex 跑在隔离沙箱里，端到端把编程任务做完（直接出 PR/MR），也能跑通用任务。底层做了四层资源模型（Project / Workload / Revision / Session）、凭据 Vault、可续传的 SSE、平台级的 Profile 版本管理，现在线上 100% 流量都走它。SDK：`@kanyun-ai-infra/agenthub`。
-- **Rush**：公司的企业级 AI 应用 / Agent 平台，把想要什么说清楚，就能拿到一个带实时预览的完整 Web 应用。内部跑到现在累计 **17,000+ 项目、3,000+ 用户、50 万+ 条消息**，每月稳定有约 1,000 人在建项目，平台上沉淀了 400+ 个 Agent。我是核心维护者（512 个 PR）。
-- **[OpenRush](https://github.com/kanyun-rush/open-rush)**：开源、能自己部署的 Claude Code 托管 Agent 平台，沙箱执行、Agent/Skill/MCP registry、双层凭据 Vault、流式事件协议一应俱全。
+**要解决的问题：** 跑起来一个 Agent 已经不难，难的是管理一批 Agent。改动没有版本和评审，效果好坏没有客观评估，生产环境出了问题也说不清是哪次改动造成的。
 
-### Agent 工具链（CLI + MCP）
+**关键决策：**
 
-为了让 AI Agent 真能上手操作生产系统，我做了一组 CLI + MCP，都发到了 npm：
+- **Agent 即代码。** Agent 定义以文件形式存放在 Git 仓库中，每次改动都经过 commit、评审和流水线，可以追溯和回滚。
+- **评估是上线的前提。** 每个版本先评估，再部署到生产环境。目标是由系统强制执行「未经评估的版本不能上线」，而不是依靠流程约定。
+- **平台与业务分离。** 业务方只负责角色、技能和业务工具；运行环境、模型接入、凭据、发布和会话管理由平台统一提供。模型不绑定厂商。
+- **可观测是独立模块。** 会话、事件和 Trace 不只用于排障，也是新评估用例的来源。
 
-- **octo-cli**：可观测性，查日志、告警、链路、指标、RUM、拓扑
-- **conso-cli**：Console 平台运维，管部署、服务、Pod、资源
-- **docz-cli** / **rush-shimo-cli**：读写公司文档（DocSync / 石墨）
-- **jira-cli**：给 Agent 用的 Jira，管 issue、sprint、board
-- **qlint**：可观测查询的 linter，帮 Agent 写出正确的查询语句
+**结果：**
 
-### 技能、质量与基建
+- 平台已承接全部生产流量，Rush 已接入。
+- 除编程类任务外，平台还支持语音 Agent（语音输入输出和实时语音对话），并可接入企业微信、Slack 等对话渠道。
+- [AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase) 收录了电商、在线教育、语言学习和生产值班四个场景的 10 个 Agent 应用，覆盖导购、上课、作业批改、英语实时语音对话和值班巡检。Agent 定义、业务工具和界面源码全部公开。
 
-- **reskill**（共建）：AI Agent 的技能包管理器，用起来像 npm，`npx reskill install`
-- **agent-aware**：让 Agent「看见」用户在网页里的操作（点击、滚动、卡壳），据此自动修
-- **[Sparring](https://github.com/krislavten/sparring)**：对抗式的 AI 代码审查插件，让另一个 AI（Cursor / Codex / GLM / Claude）专挑 Claude 写的代码的毛病
-- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)**：Claude Desktop 的企业批量部署工具，逆向出了 51 个 MDM 配置项
-- **rush-plugin · claude-env · env-sync**：日常工作流和环境管理的小工具
+<details>
+<summary>运行架构</summary>
 
-### 闭环
+```mermaid
+flowchart LR
+    subgraph IN["接入层"]
+        UI["控制台 / 托管对话页"]
+        SDK["SDK / API"]
+        GIT["Repo push → Pipeline"]
+        CH["定时任务 / 对话渠道"]
+    end
+    CP["控制层<br/>鉴权 · 校验 · 创建 Session · 入队"]
+    DB[("PostgreSQL<br/>状态 · 事件 · 启动任务")]
+    CW["编排层<br/>申请 / 绑定 Sandbox · 预热池"]
+    subgraph SB["Kanyun Sandbox"]
+        RT["运行时进程<br/>Claude Code / Codex / live"]
+        PA["pod-agent<br/>Git · 模型 · 对象存储代理"]
+    end
+    GW["凭据网关<br/>MCP 代理 · 白名单 · 凭据注入"]
+    UP["模型服务 · MCP · 代码仓库"]
+    IN --> CP --> DB --> CW --> SB
+    RT --> GW --> UP
+    PA --> UP
+    RT -. 事件回流 .-> DB
+    DB -. SSE / 状态查询 .-> IN
+```
 
-- **TentaClaw**：想把闭环做到写代码之外——Issue → Code → Deploy → Observe → Feedback 一整圈，每个 repo 配一个自己的 Agent。
+请求写入状态库后立即返回。Sandbox 的申请、启动和健康检查由后台编排完成；运行时事件写回平台，再通过 SSE 推送给页面和 API 调用方。Agent 定义中只包含凭据引用，凭据在运行时由网关注入。
 
-## 🧭 怎么干活
+</details>
 
-- **工具自己造，也自己用。** Rush、agenthub、OpenRush 本身就是我用 AI Agent（Claude Code + Cursor）写出来的，质量靠 Sparring 把关。造和用之间几乎没有时差。
-- **先有验证器，再谈怎么做；环境设计优先于中央调度。** 先把「怎么算做对了」想清楚，再让多个 Agent 在同一套环境里各跑各的、自然协作，而不是立一个中心去指挥。
-- **节奏：** 2026 上半年提了约 971 个 PR、2,100 次 commit，光 Rush 一个仓就占 512 个。
+### Rush：企业级 AI 应用平台（核心维护者）
 
-## 🛠 之前在做什么
+用户用自然语言描述需求，Rush 生成带实时预览的完整 Web 应用。截至 2026 年 6 月，公司内部累计超过 17,000 个项目、3,000 名用户，每月约 1,000 人在平台上创建项目。2026 年上半年，我在 Rush 仓库提交了 512 个 PR。
 
-转 AI 之前，我花了四年做 **Octopus**——公司级的可观测平台（RUM、Logs、Trace、Alerts、LLM Observability）。所以轮到我做 AI Infra 时，「可观测」这一环不是凭空补的，是从生产里实打实踩出来的。
+### 用 Agent 团队做研发（2026 年下半年起）
 
-## 💻 技术栈
+AgentHub 的代码几乎都由一支 Agent 团队编写。团队由 Claude Code、Codex 和 opencode 会话组成，我负责制定规则、做最终决策和授权。
 
-`TypeScript` · `Node.js` · `React` · `Next.js` · `Hono` · `PostgreSQL` · `Redis` · `Docker` · `K8s`
-`Claude Agent SDK` · `AI SDK` · `MCP` · `Codex` · `OpenTelemetry` · `pnpm/turborepo`
+- **产出**：2026 年 7 月至 10 月上旬，这支团队在 AgentHub 仓库合入约 1,600 个 PR，其中 9 月超过 1,000 个。
+- **质量**：每个 PR 合并前，必须在同一个 commit 上通过四道独立检查——对抗式代码审查、深度审查、变异测试和 CI。任务部署到生产环境且回归检查通过，才算完成。
+- **稳定运转**：每个角色的职责边界写在文件中，会话重启后自动重新加载。团队犯过的错记录为规则，写入角色文件或 hook。为此，我编写了团队消息层 kris-team，并基于 herdr-board 的 fork 搭建了任务看板。
 
-## 📫 找我
+### Octopus：公司级可观测平台（4 年）
 
-- 邮箱 — [adwerrd@hotmail.com](mailto:adwerrd@hotmail.com)
-- X — [@kris_wpf](https://x.com/kris_wpf)
-- 小红书 — @kriiswu
+覆盖 RUM、日志、Trace、告警和 LLM 可观测。
+
+## 开源项目
+
+- **[codeontic](https://github.com/krislavten/codeontic)**：一次上线评审中，运维问：「大部分由 Agent 写的代码，你们还控制得住吗？」codeontic 是我的回答：在代码之上维护一层机器可核对的行为模型，每个 PR 都由确定性检查器核对代码是否仍然符合模型。
+- **[Sparring](https://github.com/krislavten/sparring)**：让另一个 AI 专门审查 Claude 写的代码并找出缺陷，是 Agent 团队的合并检查之一。
+- **[OpenRush](https://github.com/kanyun-rush/open-rush)**：开源、可自部署的 Claude Code 托管 Agent 平台。
+- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)**：Claude Desktop 的企业批量部署工具。
+- **其他 Agent 工具**：[ai-sdk-provider-dsh](https://github.com/krislavten/ai-sdk-provider-dsh)、[ai-explore-review-loop-plugin](https://github.com/kanyun-inc/ai-explore-review-loop-plugin)，以及一组让 Agent 操作公司生产系统的 CLI（可观测、运维、文档和 Jira，已发布到 npm）。
+
+## 工作原则
+
+- **Agent 写代码已成定局。** 因此「控制住代码」不再意味着「有人读过每一行」，而是「系统应该如何运转，写在机器可核对的地方」。
+- **先定义怎样算对，再交给 Agent。** 验收标准、合并规则和角色边界都写成文件，由脚本执行，不依赖记忆。
+- **规则来自真实的错误。** 每条规则都应能说明是哪一次错误促成的。
+- **工具自己造，也自己用。** AgentHub、Rush 和团队工具都由 Agent 编写，我每天都在使用。
+
+## 技术栈
+
+`TypeScript` · `Node.js` · `React` · `Next.js` · `Hono` · `PostgreSQL` · `Redis` · `Docker` · `Kubernetes`
+`Claude Agent SDK` · `AI SDK` · `MCP` · `Claude Code` · `Codex` · `OpenTelemetry`
+
+## 联系方式
+
+- 邮箱：[adwerrd@hotmail.com](mailto:adwerrd@hotmail.com)
+- X：[@kris_wpf](https://x.com/kris_wpf)
+- 小红书：@kriiswu
