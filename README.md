@@ -7,7 +7,7 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > I build agent apps and the platform under them — and a team of agents writes the code.
 
-I run AI infrastructure at Yuanfudao and explore where agents can actually land in the business. On the application side: **Rush** and a set of agent apps. On the platform side: **AgentHub**, our enterprise agent platform — turning what we learn in those apps into platform capabilities that get the next agent app shipped faster.
+I run AI infrastructure at Yuanfudao and explore where agents can actually land in the business. On the application side: **Rush**, our enterprise AI app platform. On the platform side: **AgentHub**, our enterprise agent platform — turning what we learn in Rush into platform capabilities that get the next agent app shipped faster.
 
 I'm also a heavy agent user — 200B+ tokens a month. Agents now write almost all of my code; my job has shifted to designing systems, setting rules and judging results.
 

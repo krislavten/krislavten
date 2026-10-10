@@ -7,7 +7,7 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > 我做 Agent 应用，也做支撑它们的平台；写代码的是一支 Agent 团队。
 
-我在猿辅导负责 AI 基础设施，同时探索 Agent 能用在哪些业务上。应用侧是 **Rush** 和一批 Agent 应用；平台侧是企业 Agent 平台 **AgentHub**。应用中积累的经验做成平台能力，平台再让新的 Agent 应用更快上线。
+我在猿辅导负责 AI 基础设施，同时探索 Agent 能用在哪些业务上。应用侧是企业级 AI 应用平台 **Rush**，平台侧是企业 Agent 平台 **AgentHub**。Rush 中积累的经验做成平台能力，平台再让新的 Agent 应用更快上线。
 
 我也是 Agent 的重度用户，每月消耗超过 2,000 亿 token。现在我的代码几乎都由 Agent 编写，我的工作重心转向设计系统、制定规则和判断结果。
 
