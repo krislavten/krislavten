@@ -15,15 +15,33 @@ In H2 2026 my focus moved from Rush to AgentHub, and day-to-day development move
 
 ### AgentHub — enterprise agent platform
 
-**AgentHub** (repo codename Pilot) is our full-lifecycle agent platform: four modules — **Define, Evaluate, Run, Observe** — with Git carrying every change from definition through evaluation to production. Agents run in Kanyun Sandbox containers on Claude Code or Codex runtimes.
+**AgentHub** (repo codename Pilot) is our full-lifecycle agent platform. The goal: **10× faster agent delivery** — developers own the role, skills and business tools; the platform owns the runtime, model access, releases and sessions.
 
-- **Run** — shipped. Four-layer resource model (Project / Workload / Revision / Session), credential Vault, resumable SSE event stream, Revision / Stage deployments; serving **100% of production traffic**. SDK: `@kanyun-ai-infra/agenthub`.
-- **Define (Agent-as-Code)** — agents live as files (`agent.yaml` …) in Git; UI edits, AI-generated changes and user pushes all become commits, and the DB holds a read-only projection. Design approved, in progress.
-- **Evaluate** — EvalRun worker and five graders (`transcript` / `file` / `llm` / `script` / `reply`) live; production deploy gate and online sampling in progress.
-- **Observe** — sessions, events, traces and artifacts available; linking them to versions, deployments and eval results in progress.
-- **Also** — Slack and other channels, a public status page, a commit pipeline.
+**Why.** The question has shifted from "can we get an agent running?" to "how do we manage a fleet of them?":
 
-July – early October 2026: **~1,600 PRs** merged into AgentHub under my name, 1,000+ in September alone — almost all written by the agent team below.
+- Prompts, tools and skills scattered across UI forms and databases — no versions, no review, no rollback.
+- No repeatable way to tell whether a change made an agent better or worse — just manual trial and gut feel.
+- When production breaks, no way to say which version, which change, and whether it was ever evaluated.
+
+**How.** Four modules — **Define, Evaluate, Run, Observe** — with Git carrying every change from definition through evaluation to production. Runtime data stays out of Git; Observe collects it and feeds it back into eval cases and definitions.
+
+- **Define (Agent-as-Code)** — agents live as files (`agent.yaml` …) in Git; UI edits, AI-generated changes and user pushes all become commits, and the DB holds a read-only projection. Each push runs a commit pipeline: resolve → freeze inputs → bake image → Revision → deploy to the test Stage → eval. Design approved, in progress.
+- **Evaluate** — EvalRun worker and five graders (`transcript` / `file` / `llm` / `script` / `reply`) live, with eval verdicts shown in the pipeline. Production deploy gate and online sampling in progress — so "no eval, no production" becomes a system rule, not a convention.
+- **Run** — shipped, serving **100% of production traffic**. Agents run in Kanyun Sandbox containers as `managed_agent` (platform-run runtime) or `self_managed` (the business owns the loop and sessions).
+  - Four-layer resource model (Project / Workload / Revision / Session), Revision / Stage deployments, resumable SSE event stream.
+  - Session pre-warming pool: sandbox, worker and business init done ahead of time, so a request just claims a ready session. Rush is the first consumer.
+  - 11 model vendors through the company ModelGate — Anthropic, OpenAI, DeepSeek, Zhipu, Moonshot, MiniMax and more.
+  - Credential Vault + MCP proxy gateway: sandbox MCP calls go through an allowlisting gateway that decrypts credentials from the Vault.
+  - Declare `channels:` in `agent.yaml` to put an agent on Slack and other chat channels.
+  - Public SDK `@kanyun-ai-infra/agenthub` and a CLI.
+- **Observe** — sessions, events, traces and artifacts available; linking them to versions, deployments and eval results in progress. Plus per-project usage billing and a separately deployed public status page that stays up when the portal doesn't.
+- **Console assistant** — a built-in chat assistant ("Pilot") that loads skills for the page you're on and answers from platform data; any change it proposes is a draft or confirm card that the user applies.
+
+**Engineering milestones:**
+
+- **v1 → v2 migration finished** — v1 portal deleted in September 2026, v1/v2 traffic-split router deleted on Sept 27; all new work is v2-only.
+- **Spec-first** — every feature starts as a behavioral spec with MUST / MUST NOT clauses and test points, then agents implement it; the repo's `AGENTS.md` is the standing map for coding agents.
+- **Pace** — July – early October 2026: **~1,600 PRs** merged under my name, 1,000+ in September alone — almost all written by the agent team below.
 
 **[AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase)** — two end-to-end apps built on AgentHub, with agent definitions, business tools and UI source: e-commerce (shopping + merchant assistants, after Anthropic's [commerce-agents](https://github.com/anthropics/commerce-agents)) and online education (course advising → in-class tutoring → weekly reports for teachers).
 

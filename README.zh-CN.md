@@ -15,15 +15,33 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 ### AgentHub：企业 Agent 平台
 
-**AgentHub**（仓库代号 Pilot）是公司的全生命周期 Agent 平台，分为定义、评估、运行和观测四个模块，用 Git 串起「定义 → 评估 → 部署到 production」这条变更流程。Agent 在 Kanyun Sandbox 容器中执行，运行时支持 Claude Code 和 Codex。
+**AgentHub**（仓库代号 Pilot）是公司的全生命周期 Agent 平台。目标是让 Agent 的交付效率提升 10 倍：开发者只负责角色、技能和业务工具，运行环境、模型接入、版本发布和会话管理由平台承担。
 
-- **运行**：已交付。Project / Workload / Revision / Session 四层资源模型、凭据 Vault、可续传的 SSE 事件流、Revision 与 Stage 部署，承接了线上全部流量。SDK 为 `@kanyun-ai-infra/agenthub`。
-- **定义（Agent-as-Code）**：Agent 以 `agent.yaml` 等文件存放在 Git 仓库中，界面编辑、AI 生成和用户推送都形成 commit，数据库只保存只读投影。方案已确定，正在实施。
-- **评估**：EvalRun worker 和五类 Grader（`transcript`、`file`、`llm`、`script`、`reply`）已上线，production 部署门禁和线上采样还在开发中。
-- **观测**：会话、事件、Trace 和产物已经可以查看；与版本、部署和评估结果的关联正在完善。
-- **其他能力**：Slack 等消息渠道接入、公开状态页和提交流水线。
+**为什么做。** 企业面对的问题已经从「能不能跑起来一个 Agent」变成「怎么管理一批 Agent」：
 
-2026 年 7 月至 10 月上旬，AgentHub 仓库合入了约 1,600 个以我署名的 PR，其中 9 月单月超过 1,000 个。这些 PR 绝大部分由下文的 Agent 团队完成。
+- Prompt、工具和技能散落在界面表单和数据库里，改动没有版本、没有评审、无法回滚。
+- Agent 改完之后变好还是变差，没有可重复的评估方法，只能靠人工试用。
+- 线上出了问题，说不清是哪个版本、哪次改动、是否评估过。
+
+**怎么做。** AgentHub 分为定义、评估、运行和观测四个模块，用 Git 串起「定义 → 评估 → 部署到 production」的变更流程；运行数据不进 Git，由观测模块收集后反过来补充评估用例和定义。
+
+- **定义（Agent-as-Code）**：Agent 以 `agent.yaml` 等文件存放在 Git 仓库中，界面编辑、AI 生成和用户推送都形成 commit，数据库只保存只读投影。每次 push 触发提交流水线：解析 commit、冻结构建输入、构建镜像、生成 Revision、部署到 test Stage，再运行评估。方案已确定，正在实施。
+- **评估**：EvalRun worker 和五类 Grader（`transcript`、`file`、`llm`、`script`、`reply`）已上线，评估结论已显示在流水线中。production 部署门禁和线上采样还在开发中，目标是让「未完成评估的版本不能上线」由系统强制执行。
+- **运行**：已交付，承接了线上全部流量。Agent 在 Kanyun Sandbox 容器中执行，支持两类 workload：平台托管运行时的 `managed_agent`，以及业务自己管理循环和会话的 `self_managed`。
+  - Project / Workload / Revision / Session 四层资源模型，Revision 与 Stage 部署，可续传的 SSE 事件流。
+  - 会话预热池：沙箱、worker 和业务初始化提前完成，请求到来时只需领取一个就绪会话。Rush 是第一个接入方。
+  - 通过公司 ModelGate 接入 11 类模型厂商，包括 Anthropic、OpenAI、DeepSeek、智谱、Moonshot 和 MiniMax。
+  - 凭据 Vault 和 MCP 代理网关：沙箱内的 MCP 调用经网关按白名单转发，所需凭据在网关侧从 Vault 解密。
+  - 在 `agent.yaml` 里声明 `channels:` 即可把 Agent 接入 Slack 等对话渠道。
+  - 对外提供 SDK `@kanyun-ai-infra/agenthub` 和 CLI。
+- **观测**：会话、事件、Trace 和产物已经可以查看；与版本、部署和评估结果的关联正在完善。另有按项目分摊的用量账单，以及独立部署的公开状态页（门户故障时状态页仍然可用）。
+- **控制台助手**：控制台内置一个名为 Pilot 的对话助手，按用户所在页面加载技能，可以直接回答平台数据问题。修改平台数据时只生成草稿或确认卡，由用户确认后执行。
+
+**工程上做过的事：**
+
+- **完成 v1 到 v2 的迁移**：2026 年 9 月删除 v1 门户，9 月 27 日删除 v1/v2 流量分流器，所有新功能只在 v2 上开发。
+- **规格先行**：每个功能先写行为规格，规定 MUST / MUST NOT 条款和对应的测试点，再交给 Agent 实现；仓库里的 `AGENTS.md` 是给 coding agent 读的常驻规则和模块索引。
+- **交付节奏**：2026 年 7 月至 10 月上旬，仓库合入了约 1,600 个以我署名的 PR，其中 9 月单月超过 1,000 个。这些 PR 绝大部分由下文的 Agent 团队完成。
 
 **[AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase)** 公开了两个基于 AgentHub 构建的完整案例，包含 Agent 定义、业务工具和界面源码：
 
