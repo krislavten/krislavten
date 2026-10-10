@@ -5,9 +5,9 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 🌏 **[中文版本 →](./README.zh-CN.md)**
 
-> I build agent infrastructure — with a team of agents.
+> I build agent apps and the platform under them — and a team of agents writes the code.
 
-I run AI infrastructure at Yuanfudao; my main product is **AgentHub**, our enterprise agent platform. I care about how agents are defined, evaluated, shipped, and traced back when something goes wrong.
+I run AI infrastructure at Yuanfudao and explore where agents can actually land in the business. On the application side: **Rush** and a set of agent apps. On the platform side: **AgentHub**, our enterprise agent platform — turning what we learn in those apps into platform capabilities that get the next agent app shipped faster.
 
 I'm also a heavy agent user — 200B+ tokens a month. Agents now write almost all of my code; my job has shifted to designing systems, setting rules and judging results.
 
@@ -61,6 +61,10 @@ Requests are written to the state store and return immediately; sandbox acquisit
 
 </details>
 
+### Rush — enterprise AI app platform (core maintainer)
+
+Describe what you want, get a full web app with live preview. As of June 2026: **17,000+ projects, 3,000+ users** internally, ~1,000 monthly active creators. 512 PRs from me in H1 2026.
+
 ### Building with an agent team (H2 2026–present)
 
 Almost all of AgentHub's code is written by a team of Claude Code, Codex and opencode sessions. I set the rules, make the final calls and grant access.
@@ -68,10 +72,6 @@ Almost all of AgentHub's code is written by a team of Claude Code, Codex and ope
 - **Output** — July to early October 2026, the team merged **~1,600 PRs** into AgentHub, 1,000+ in September alone.
 - **Quality** — every PR must pass four independent checks on the same commit before merge: adversarial code review, deep review, mutation testing and CI. A task is done only when it's in production and regression checks are green.
 - **Keeping it stable** — each role's boundaries live in a file that's reloaded whenever a session restarts; every mistake the team makes becomes a rule in a file or a hook. I built the team's messaging layer (kris-team) and task board (a herdr-board fork) for this.
-
-### Rush — enterprise AI app platform (H1 2026 focus, core maintainer)
-
-Describe what you want, get a full web app with live preview. As of June 2026: **17,000+ projects, 3,000+ users** internally, ~1,000 monthly active creators. 512 PRs from me in H1 2026.
 
 ### Octopus — company-wide observability platform (4 years)
 
