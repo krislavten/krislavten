@@ -17,6 +17,32 @@ In H2 2026 my focus moved from Rush to AgentHub, and day-to-day development move
 
 **AgentHub** (repo codename Pilot) is our full-lifecycle agent platform. The goal: **10× faster agent delivery** — developers own the role, skills and business tools; the platform owns the runtime, model access, releases and sessions.
 
+```mermaid
+flowchart LR
+    subgraph IN["Entry"]
+        UI["Console / hosted chat"]
+        SDK["SDK / API"]
+        GIT["Repo push → Pipeline"]
+        CH["Schedules / chat channels"]
+    end
+    CP["Control plane<br/>auth · validate · create Session · enqueue"]
+    DB[("PostgreSQL<br/>state · events · startup jobs")]
+    CW["Control worker<br/>acquire / bind Sandbox · warm pool"]
+    subgraph SB["Kanyun Sandbox"]
+        RT["Runtime<br/>Claude Code / Codex / live"]
+        PA["pod-agent<br/>Git · model · object-storage proxy"]
+    end
+    GW["Credential gateway<br/>MCP proxy · allowlist · secret injection"]
+    UP["Model services · MCP · repos"]
+    IN --> CP --> DB --> CW --> SB
+    RT --> GW --> UP
+    PA --> UP
+    RT -. events .-> DB
+    DB -. SSE / status .-> IN
+```
+
+Requests are written to the state store and return immediately; sandbox acquisition, startup and health checks run in the background, and runtime events flow back to the platform and out over SSE.
+
 **Why.** The question has shifted from "can we get an agent running?" to "how do we manage a fleet of them?":
 
 - Prompts, tools and skills scattered across UI forms and databases — no versions, no review, no rollback.
@@ -30,9 +56,10 @@ In H2 2026 my focus moved from Rush to AgentHub, and day-to-day development move
 - **Run** — shipped, serving **100% of production traffic**. Agents run in Kanyun Sandbox containers as `managed_agent` (platform-run runtime) or `self_managed` (the business owns the loop and sessions).
   - Four-layer resource model (Project / Workload / Revision / Session), Revision / Stage deployments, resumable SSE event stream.
   - Session pre-warming pool: sandbox, worker and business init done ahead of time, so a request just claims a ready session. Rush is the first consumer.
-  - 11 model vendors through the company ModelGate — Anthropic, OpenAI, DeepSeek, Zhipu, Moonshot, MiniMax and more.
-  - Credential Vault + MCP proxy gateway: sandbox MCP calls go through an allowlisting gateway that decrypts credentials from the Vault.
-  - Declare `channels:` in `agent.yaml` to put an agent on Slack and other chat channels.
+  - Vendor-neutral: model services can plug in models from any vendor.
+  - Credential gateway: agent definitions carry only `sec_*` references — plaintext never enters Git or the definition; secrets are stored encrypted and injected at runtime. MCP, model, repo and object-storage access all goes through the gateway and pod-agent proxies, with allowlisted egress.
+  - Voice agents: add a `voice` block to a regular agent to accept recordings (auto-transcribed) and speak its replies; `format: live` agents do real-time voice conversation with no sandbox — a shared platform service calls the model directly. Both use the same session API.
+  - Declare `channels:` in `agent.yaml` to put an agent on WeCom, Slack and other chat channels; or start sessions on a cron schedule, and get a webhook at the end of every turn.
   - Public SDK `@kanyun-ai-infra/agenthub` and a CLI.
 - **Observe** — sessions, events, traces and artifacts available; linking them to versions, deployments and eval results in progress. Plus per-project usage billing and a separately deployed public status page that stays up when the portal doesn't.
 - **Console assistant** — a built-in chat assistant ("Pilot") that loads skills for the page you're on and answers from platform data; any change it proposes is a draft or confirm card that the user applies.

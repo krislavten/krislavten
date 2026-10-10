@@ -17,6 +17,32 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 **AgentHub**（仓库代号 Pilot）是公司的全生命周期 Agent 平台。目标是让 Agent 的交付效率提升 10 倍：开发者只负责角色、技能和业务工具，运行环境、模型接入、版本发布和会话管理由平台承担。
 
+```mermaid
+flowchart LR
+    subgraph IN["接入层"]
+        UI["控制台 / 托管对话页"]
+        SDK["SDK / API"]
+        GIT["Repo push → Pipeline"]
+        CH["定时任务 / 对话渠道"]
+    end
+    CP["控制层<br/>鉴权 · 校验 · 创建 Session · 入队"]
+    DB[("PostgreSQL<br/>状态 · 事件 · 启动任务")]
+    CW["编排层<br/>申请 / 绑定 Sandbox · 预热池"]
+    subgraph SB["Kanyun Sandbox"]
+        RT["运行时进程<br/>Claude Code / Codex / live"]
+        PA["pod-agent<br/>Git · 模型 · 对象存储代理"]
+    end
+    GW["凭据网关<br/>MCP 代理 · 白名单 · 凭据注入"]
+    UP["模型服务 · MCP · 代码仓库"]
+    IN --> CP --> DB --> CW --> SB
+    RT --> GW --> UP
+    PA --> UP
+    RT -. 事件回流 .-> DB
+    DB -. SSE / 状态查询 .-> IN
+```
+
+请求写入状态库后立即返回，Sandbox 的申请、启动和健康检查由后台编排推进；运行时事件写回平台，再通过 SSE 推给页面和 API 调用方。
+
 **为什么做。** 企业面对的问题已经从「能不能跑起来一个 Agent」变成「怎么管理一批 Agent」：
 
 - Prompt、工具和技能散落在界面表单和数据库里，改动没有版本、没有评审、无法回滚。
@@ -30,9 +56,10 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 - **运行**：已交付，承接了线上全部流量。Agent 在 Kanyun Sandbox 容器中执行，支持两类 workload：平台托管运行时的 `managed_agent`，以及业务自己管理循环和会话的 `self_managed`。
   - Project / Workload / Revision / Session 四层资源模型，Revision 与 Stage 部署，可续传的 SSE 事件流。
   - 会话预热池：沙箱、worker 和业务初始化提前完成，请求到来时只需领取一个就绪会话。Rush 是第一个接入方。
-  - 通过公司 ModelGate 接入 11 类模型厂商，包括 Anthropic、OpenAI、DeepSeek、智谱、Moonshot 和 MiniMax。
-  - 凭据 Vault 和 MCP 代理网关：沙箱内的 MCP 调用经网关按白名单转发，所需凭据在网关侧从 Vault 解密。
-  - 在 `agent.yaml` 里声明 `channels:` 即可把 Agent 接入 Slack 等对话渠道。
+  - 模型不绑定厂商：模型服务可以接入任意厂商的模型。
+  - 凭据网关：Agent 定义里只写 `sec_*` 引用，明文不进 Git、不进定义，加密存储在平台上，运行时才注入。访问 MCP、模型、代码仓库和对象存储都经过网关和 pod-agent 代理，按白名单控制出站。
+  - 语音 Agent：普通 Agent 在 `agent.yaml` 里声明 `voice` 段，就能接收录音（自动转写）并把回复合成为语音；`format: live` 的 Agent 用于实时语音对话，不建沙箱，由平台的共享服务直接调用模型。两种形态使用同一套会话 API。
+  - 在 `agent.yaml` 里声明 `channels:` 即可把 Agent 接入企业微信、Slack 等对话渠道；也可以按 cron 定时创建会话，或在每轮结束时通过 Webhook 通知业务系统。
   - 对外提供 SDK `@kanyun-ai-infra/agenthub` 和 CLI。
 - **观测**：会话、事件、Trace 和产物已经可以查看；与版本、部署和评估结果的关联正在完善。另有按项目分摊的用量账单，以及独立部署的公开状态页（门户故障时状态页仍然可用）。
 - **控制台助手**：控制台内置一个名为 Pilot 的对话助手，按用户所在页面加载技能，可以直接回答平台数据问题。修改平台数据时只生成草稿或确认卡，由用户确认后执行。
