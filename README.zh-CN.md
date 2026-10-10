@@ -7,7 +7,7 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > 我做 Agent 基础设施，也用一支 Agent 团队来做它。
 
-我在猿辅导负责 AI 基础设施，主要产品是企业 Agent 平台 **AgentHub**。我不训练模型，关心的是 Agent 怎么定义、怎么评估、怎么上线，以及出了问题怎么归因。
+我在猿辅导负责 AI 基础设施，主要产品是企业 Agent 平台 **AgentHub**。我关心的是 Agent 怎么定义、怎么评估、怎么上线，以及出了问题怎么归因。
 
 我也是 Agent 的重度用户，每月消耗超过 2,000 亿 token。现在我写的代码几乎都由 Agent 完成，我的工作重心变成了设计系统、制定规则和判断结果。
 

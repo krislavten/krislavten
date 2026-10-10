@@ -7,7 +7,7 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > I build agent infrastructure — with a team of agents.
 
-I run AI infrastructure at Yuanfudao; my main product is **AgentHub**, our enterprise agent platform. I don't train models. I care about how agents are defined, evaluated, shipped, and traced back when something goes wrong.
+I run AI infrastructure at Yuanfudao; my main product is **AgentHub**, our enterprise agent platform. I care about how agents are defined, evaluated, shipped, and traced back when something goes wrong.
 
 I'm also a heavy agent user — 200B+ tokens a month. Agents now write almost all of my code; my job has shifted to designing systems, setting rules and judging results.
 
