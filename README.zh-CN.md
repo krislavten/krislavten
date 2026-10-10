@@ -1,63 +1,85 @@
-# 你好，我是 Kris（吴鹏飞）👋
+# 你好，我是 Kris（吴鹏飞）
 
 **AI Infra Lead @ 猿辅导（看云 / Kanyun）** · 北京
 GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.com/kris_wpf)
 
-🌏 **[English →](./README.md)**
+**[English →](./README.md)**
 
-> 从可观测工程师，到 AI 工程师。我只做一件事：把 AI 原生开发真正缺的那层基础设施补上。
+> 从可观测工程师转为 AI 工程师。现在主要做两件事：搭建企业 Agent 平台 AgentHub，以及用一支 Agent 团队把这个平台写出来。
 
-我不训模型，做的是 Agent，而且不只是搭管道，是想把 Agent 整个做透：它到底该怎么定义、怎么用、底层要配什么基础设施。重度使用 Agent，月消耗 token 超过 300 亿。
+我不训练模型，做的是 Agent 和 Agent 需要的基础设施：Agent 怎么定义、怎么评估、怎么运行、出了问题怎么归因。我自己也是 Agent 的重度用户，每月消耗超过 300 亿 token。
 
-具体在探三块：一块是用 Agent 写代码，把全链路能力真正做进生产；一块是 Agent 能落到哪些业务上，我们拿 Rush 做建站、拿 TentaClaw 做可观测；还有一块是 Agent 的基础设施，把在 Rush 这些场景里趟出来的经验做成一个 managed agents 平台，反过来给业务提速、让 AI 更快落地。
+2026 年下半年的重心从 Rush 转到 AgentHub，同时把日常开发交给一支由 Claude Code、Codex 和 opencode 会话组成的 Agent 团队，自己负责定规则、审结果和发布。
 
-## 🚀 在做什么
+## 在做什么
 
-### 平台
+### AgentHub：企业 Agent 平台
 
-- **agenthub**（Pilot v2）：自研的托管 Agent 平台。Claude Code / Codex 跑在隔离沙箱里，端到端把编程任务做完（直接出 PR/MR），也能跑通用任务。底层做了四层资源模型（Project / Workload / Revision / Session）、凭据 Vault、可续传的 SSE、平台级的 Profile 版本管理，现在线上 100% 流量都走它。SDK：`@kanyun-ai-infra/agenthub`。
-- **Rush**：公司的企业级 AI 应用 / Agent 平台，把想要什么说清楚，就能拿到一个带实时预览的完整 Web 应用。内部跑到现在累计 **17,000+ 项目、3,000+ 用户、50 万+ 条消息**，每月稳定有约 1,000 人在建项目，平台上沉淀了 400+ 个 Agent。我是核心维护者（512 个 PR）。
-- **[OpenRush](https://github.com/kanyun-rush/open-rush)**：开源、能自己部署的 Claude Code 托管 Agent 平台，沙箱执行、Agent/Skill/MCP registry、双层凭据 Vault、流式事件协议一应俱全。
+**AgentHub**（仓库代号 Pilot）是公司的全生命周期 Agent 平台，分为定义、评估、运行和观测四个模块，用 Git 串起「定义 → 评估 → 部署到 production」这条变更流程。Agent 在 Kanyun Sandbox 容器中执行，运行时支持 Claude Code 和 Codex。
 
-### Agent 工具链（CLI + MCP）
+- **运行**：已交付。Project / Workload / Revision / Session 四层资源模型、凭据 Vault、可续传的 SSE 事件流、Revision 与 Stage 部署，承接了线上全部流量。SDK 为 `@kanyun-ai-infra/agenthub`。
+- **定义（Agent-as-Code）**：Agent 以 `agent.yaml` 等文件存放在 Git 仓库中，界面编辑、AI 生成和用户推送都形成 commit，数据库只保存只读投影。方案已确定，正在实施。
+- **评估**：EvalRun worker 和五类 Grader（`transcript`、`file`、`llm`、`script`、`reply`）已上线，production 部署门禁和线上采样还在开发中。
+- **观测**：会话、事件、Trace 和产物已经可以查看；与版本、部署和评估结果的关联正在完善。
+- **其他能力**：Slack 等消息渠道接入、公开状态页和提交流水线。
 
-为了让 AI Agent 真能上手操作生产系统，我做了一组 CLI + MCP，都发到了 npm：
+2026 年 7 月至 10 月上旬，AgentHub 仓库合入了约 1,600 个以我署名的 PR，其中 9 月单月超过 1,000 个。这些 PR 绝大部分由下文的 Agent 团队完成。
 
-- **octo-cli**：可观测性，查日志、告警、链路、指标、RUM、拓扑
-- **conso-cli**：Console 平台运维，管部署、服务、Pod、资源
-- **docz-cli** / **rush-shimo-cli**：读写公司文档（DocSync / 石墨）
-- **jira-cli**：给 Agent 用的 Jira，管 issue、sprint、board
-- **qlint**：可观测查询的 linter，帮 Agent 写出正确的查询语句
+**[AgentHub Showcase](https://github.com/kanyun-ai-explore/agenthub-showcase)** 公开了两个基于 AgentHub 构建的完整案例，包含 Agent 定义、业务工具和界面源码：
 
-### 技能、质量与基建
+- 电商：参照 Anthropic 开源的 [commerce-agents](https://github.com/anthropics/commerce-agents)，在 AgentHub 上实现导购助手和商家助手。
+- 在线教育：从课程咨询到课堂讲解，再到给老师的学习周报。
 
-- **reskill**（共建）：AI Agent 的技能包管理器，用起来像 npm，`npx reskill install`
-- **agent-aware**：让 Agent「看见」用户在网页里的操作（点击、滚动、卡壳），据此自动修
-- **[Sparring](https://github.com/krislavten/sparring)**：对抗式的 AI 代码审查插件，让另一个 AI（Cursor / Codex / GLM / Claude）专挑 Claude 写的代码的毛病
-- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)**：Claude Desktop 的企业批量部署工具，逆向出了 51 个 MDM 配置项
-- **rush-plugin · claude-env · env-sync**：日常工作流和环境管理的小工具
+### Agent 团队：用 Agent 开发 AgentHub
 
-### 闭环
+AgentHub 的日常开发由一支 Agent 团队完成，我担任 owner，负责定规则、做最终决策和授权。
 
-- **TentaClaw**：想把闭环做到写代码之外——Issue → Code → Deploy → Observe → Feedback 一整圈，每个 repo 配一个自己的 Agent。
+- **角色分工**：lead 会话负责派发任务、裁决合并和发布；card 会话各自完成一张任务卡；hermes 负责 PR 深度审查；gate 负责变异测试和不变量核验；pm 会话负责拆分和验收一整块功能。每个角色的边界写在角色文件里，会话启动、恢复和压缩后由 hook 重新注入。
+- **合并标准**：每个 PR 必须在同一个 head commit 上通过四道检查才能合并——sparring 对抗式审查、hermes 审查、gate 变异测试和 CI。任务只有上线到 production 且回归检查通过才算完成。
+- **kris-team**：为这支团队写的消息层。Claude Code、Codex 和 opencode 会话各有一个收件箱，通过同一个 CLI `kt` 收发消息；对方忙时消息在下一次工具调用时送达，空闲时直接唤醒。lead 会话在上下文用量超过阈值后自动写交接文档并清空上下文。
+- **任务看板**：基于 [herdr-board](https://github.com/krislavten/herdr-board)（fork）派发任务：卡片进入「In progress」列即启动一个 Claude Code 会话，会话完成后自己交卡。fork 增加了 Claude 模型 provider 配置和会话启动参数。
+- **模型分档**：每张任务卡标注模型档位。机械性任务交给 DeepSeek（`deepseek-v4-flash`），复杂任务交给 Opus 等模型。
 
-## 🧭 怎么干活
+### 开源与工具
 
-- **工具自己造，也自己用。** Rush、agenthub、OpenRush 本身就是我用 AI Agent（Claude Code + Cursor）写出来的，质量靠 Sparring 把关。造和用之间几乎没有时差。
-- **先有验证器，再谈怎么做；环境设计优先于中央调度。** 先把「怎么算做对了」想清楚，再让多个 Agent 在同一套环境里各跑各的、自然协作，而不是立一个中心去指挥。
-- **节奏：** 2026 上半年提了约 971 个 PR、2,100 次 commit，光 Rush 一个仓就占 512 个。
+- **[codeontic](https://github.com/krislavten/codeontic)**：在代码之上维护一层行为模型，用 YAML 描述系统中的状态机、端到端流程和模块交接点，并绑定到真实代码符号。每个 PR 由确定性检查器（不调用 LLM）核对代码是否仍然符合模型。起因是一次上线评审中的问题：「大部分由 Agent 写的代码，你们还控制得住吗？」
+- **[ai-sdk-provider-dsh](https://github.com/krislavten/ai-sdk-provider-dsh)**：AI SDK provider，把 DeepSeek Harness（`dsh`）运行时封装成 AI SDK 的 `LanguageModel`，可以直接用 `generateText` / `streamText` 驱动。
+- **[ai-explore-review-loop-plugin](https://github.com/kanyun-inc/ai-explore-review-loop-plugin)**：Claude Code 插件。编程会话可以等待针对当前 head commit 的 PR 审查结果，收到后继续「审查、修复、推送」的循环，不需要轮询 GitHub。
+- **[Sparring](https://github.com/krislavten/sparring)**：对抗式 AI 代码审查插件，让另一个 AI（Cursor、Codex、GLM 或 Claude）专门检查 Claude 写的代码。现在是 Agent 团队合并标准中的一道检查。
+- **[OpenRush](https://github.com/kanyun-rush/open-rush)**：开源、可自部署的 Claude Code 托管 Agent 平台，包括沙箱执行、Agent / Skill / MCP 注册表、双层凭据 Vault 和流式事件协议。
+- **[cowork-mdm](https://github.com/krislavten/cowork-mdm)**：Claude Desktop 企业批量部署工具，逆向整理出 51 个 MDM 配置项。
 
-## 🛠 之前在做什么
+### 给 Agent 用的 CLI 与 MCP
 
-转 AI 之前，我花了四年做 **Octopus**——公司级的可观测平台（RUM、Logs、Trace、Alerts、LLM Observability）。所以轮到我做 AI Infra 时，「可观测」这一环不是凭空补的，是从生产里实打实踩出来的。
+这些工具让 Agent 能直接操作公司的生产系统，均已发布到 npm：
 
-## 💻 技术栈
+- **octo-cli**：可观测数据查询，包括日志、告警、Trace、指标、RUM 和拓扑
+- **conso-cli**：Console 平台运维，包括部署、服务、Pod 和资源
+- **docz-cli** / **rush-shimo-cli**：读写公司文档（DocSync、石墨）
+- **jira-cli**：Jira 的 issue、sprint 和 board 管理
+- **qlint**：可观测查询语句的 linter，帮助 Agent 写出正确的查询
+- **reskill**（共建）：Agent 技能包管理器，用法类似 npm：`npx reskill install`
+- **agent-aware**：让 Agent 获取用户在网页中的操作（点击、滚动、反复尝试等），并据此修复问题
 
-`TypeScript` · `Node.js` · `React` · `Next.js` · `Hono` · `PostgreSQL` · `Redis` · `Docker` · `K8s`
-`Claude Agent SDK` · `AI SDK` · `MCP` · `Codex` · `OpenTelemetry` · `pnpm/turborepo`
+## 工作方式
 
-## 📫 找我
+- **先定义验收标准，再动手。** 先写清楚「怎么判断做对了」，再交给 Agent 实现。合并标准、任务卡模板和角色边界都写成文件，由 hook 和脚本执行，而不是靠记忆。
+- **规则从实际问题中来。** Agent 团队犯过的错会在运行手册里记成一条带日期和出处的决策，再落到角色文件或 hook 中。
+- **工具自己造，也自己用。** AgentHub、Rush、OpenRush、kris-team 都由 Agent 写成，并在日常开发中持续使用。
 
-- 邮箱 — [adwerrd@hotmail.com](mailto:adwerrd@hotmail.com)
-- X — [@kris_wpf](https://x.com/kris_wpf)
-- 小红书 — @kriiswu
+## 之前做过什么
+
+- **Rush**（2026 年上半年的重心）：公司的企业级 AI 应用平台，用自然语言描述需求，即可生成带实时预览的完整 Web 应用。截至 2026 年 6 月，内部累计超过 17,000 个项目、3,000 名用户、50 万条消息，每月约 1,000 人在平台上创建项目，平台上有 400 多个 Agent。我是核心维护者，2026 年上半年在该仓库提交了 512 个 PR，下半年仍有少量基础设施和 CI 改动。
+- **TentaClaw**：尝试把 Issue → Code → Deploy → Observe → Feedback 做成完整流程，每个仓库配一个 Agent。该项目已停止维护，Agent 的观测能力并入 AgentHub 的观测模块。
+- **Octopus**（转向 AI 之前的 4 年）：公司级可观测平台，覆盖 RUM、日志、Trace、告警和 LLM 可观测。这段经历是 AgentHub 观测模块的基础。
+
+## 技术栈
+
+`TypeScript` · `Node.js` · `React` · `Next.js` · `Hono` · `PostgreSQL` · `Drizzle` · `pg-boss` · `Redis` · `Docker` · `Kubernetes`
+`Claude Agent SDK` · `AI SDK` · `MCP` · `Claude Code` · `Codex` · `opencode` · `OpenTelemetry` · `pnpm/turborepo`
+
+## 联系方式
+
+- 邮箱：[adwerrd@hotmail.com](mailto:adwerrd@hotmail.com)
+- X：[@kris_wpf](https://x.com/kris_wpf)
+- 小红书：@kriiswu
