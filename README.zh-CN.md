@@ -7,7 +7,7 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > 从可观测工程师转为 AI 工程师。现在主要做两件事：搭建企业 Agent 平台 AgentHub，以及用一支 Agent 团队把这个平台写出来。
 
-我不训练模型，做的是 Agent 和 Agent 需要的基础设施：Agent 怎么定义、怎么评估、怎么运行、出了问题怎么归因。我自己也是 Agent 的重度用户，每月消耗超过 300 亿 token。
+我不训练模型，做的是 Agent 和 Agent 需要的基础设施：Agent 怎么定义、怎么评估、怎么运行、出了问题怎么归因。我自己也是 Agent 的重度用户，每月消耗超过 2,000 亿 token。
 
 2026 年下半年的重心从 Rush 转到 AgentHub，同时把日常开发交给一支由 Claude Code、Codex 和 opencode 会话组成的 Agent 团队，自己负责定规则、审结果和发布。
 

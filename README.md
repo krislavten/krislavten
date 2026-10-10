@@ -7,7 +7,7 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 > From observability engineer to AI engineer. Right now: building AgentHub, our enterprise agent platform — and running a team of agents that builds it.
 
-I don't train models — I build agents and the infrastructure they need: how an agent is defined, evaluated, run, and traced back when something goes wrong. A heavy user myself — 30B+ tokens a month.
+I don't train models — I build agents and the infrastructure they need: how an agent is defined, evaluated, run, and traced back when something goes wrong. A heavy user myself — 200B+ tokens a month.
 
 In H2 2026 my focus moved from Rush to AgentHub, and day-to-day development moved to a team of Claude Code, Codex and opencode sessions. I set the rules, review the results, and ship.
 
