@@ -11,8 +11,6 @@ GitHub [@krislavten](https://github.com/krislavten) · X [@kris_wpf](https://x.c
 
 我也是 Agent 的重度用户，每月消耗超过 2,000 亿 token。现在我写的代码几乎都由 Agent 完成，我的工作重心变成了设计系统、制定规则和判断结果。
 
-转向 AI 之前，我做了 4 年可观测平台。这段经历决定了我看 Agent 的角度：先能看清它在做什么，才谈得上管理它。
-
 ## 代表工作
 
 ### AgentHub：企业 Agent 平台（2026 年至今，负责人）

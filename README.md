@@ -11,8 +11,6 @@ I run AI infrastructure at Yuanfudao; my main product is **AgentHub**, our enter
 
 I'm also a heavy agent user — 200B+ tokens a month. Agents now write almost all of my code; my job has shifted to designing systems, setting rules and judging results.
 
-Before AI, I spent 4 years building an observability platform. That shapes how I see agents: you can't manage what you can't see.
-
 ## 🚀 Selected Work
 
 ### AgentHub — enterprise agent platform (2026–present, lead)
